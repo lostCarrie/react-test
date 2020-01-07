@@ -26,13 +26,13 @@ class Comment extends Component<CommentProps, CommentState> {
     }
 
     calTimeDiff () {
-        const { commentItem } = this.props; 
-        if (commentItem) {
-            const last: any = commentItem.date;
-            const now: any = new Date();
-            const timeDiff: number = (now - last);
-            this.setState({timeDiff});
-        }
+        // const { commentItem } = this.props; 
+        // if (commentItem) {
+        //     const last: any = commentItem.date;
+        //     const now: any = new Date();
+        //     const timeDiff: number = (now - last);
+        //     this.setState({timeDiff});
+        // }
     }
     render (){
         const { commentItem } = this.props;

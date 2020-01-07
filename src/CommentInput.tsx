@@ -15,7 +15,7 @@ class CommentInput extends Component<CommentInputProps, CommentInputState> {
     static defaultProps = {
         onSubmit: () => {},
     }
-    input:HTMLInputElement | null = null;
+    textarea:HTMLTextAreaElement | null = null;
     constructor(props: CommentInputProps) {
         super(props);
         this.state = {
@@ -23,13 +23,14 @@ class CommentInput extends Component<CommentInputProps, CommentInputState> {
             content: '',
         };
     }
+
+    componentWillMount() {
+        this._loadUsername();
+    }
+
     componentDidMount() {
-        if (this.input) {
-            this.input.focus();
-            const username = sessionStorage.getItem('username');
-            if (username) {
-                this.setState({username});
-            }
+        if (this.textarea) {
+            this.textarea.focus(); 
         }
     }
 
@@ -47,6 +48,20 @@ class CommentInput extends Component<CommentInputProps, CommentInputState> {
         
     }
 
+    _loadUsername = () => {
+        const username = sessionStorage.getItem('username');
+        if (username) {
+            this.setState({username});
+        }
+    }
+    _saveUsername = (username: string) => {
+        sessionStorage.setItem('username', username);
+    }
+
+    handleUsernameBlur = (e: any) =>{
+        this._saveUsername(e.target.value);
+    }
+
     handleSubmit = () => {
         const { onSubmit } = this.props;
         const { username, content } = this.state;
@@ -61,11 +76,11 @@ class CommentInput extends Component<CommentInputProps, CommentInputState> {
             <div>
                 <div>
                     <span>用户名：</span>
-                    <input value={username} onChange={this.handleContentChange} name="username" ref={(input) => this.input = input}/>
+                    <input value={username} onChange={this.handleContentChange} name="username" onBlur={this.handleUsernameBlur} />
                 </div>
                 <div>
                     <span>用户评论：</span>
-                    <textarea value={content} onChange={this.handleContentChange} name="content" />
+                    <textarea value={content} onChange={this.handleContentChange} name="content"  ref={(textarea) => this.textarea = textarea}/>
                 </div>
                 <button onClick={this.handleSubmit}>提交</button>
             </div>

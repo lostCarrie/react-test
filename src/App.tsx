@@ -28,12 +28,20 @@ class App extends Component<AppProps, AppState> {
     }
   }
 
-  componentDidMount() {
-    const sessionComments: string | null = sessionStorage.getItem('comments');
+  componentWillMount() {
+    this._loadComments();
+  }
+
+  _loadComments = () => {
+    let sessionComments: string | null = sessionStorage.getItem('comments');
     if (sessionComments) {
-      const comments: CommentItems[] = JSON.parse(sessionComments);
+      let comments: CommentItems[] = JSON.parse(sessionComments);
       this.setState({comments});
     }
+  }
+
+  _saveComments = (comments: CommentItems[]) => {
+    sessionStorage.setItem('comments', JSON.stringify(comments));
   }
 
   handleSubmit = (username: string, content: string) => {
@@ -43,7 +51,7 @@ class App extends Component<AppProps, AppState> {
     } else {
       sessionStorage.setItem('username', username);
       comments.push({username: username, content: content, id: comments.length, date: new Date()});
-      sessionStorage.setItem('comments', JSON.stringify(comments));
+      this._saveComments(comments);
       this.setState({
         comments: comments,
       });
