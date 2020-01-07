@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import CommentInput, { CommentInputState } from './CommentInput';
 import CommentList from './CommentList';
 
+
+
+export interface CommentItems extends CommentInputState {
+  id: number;
+}
+
 interface AppProps{
-  comments: Array<CommentInputState>;
+  comments: Array<CommentItems>;
 }
 
 interface AppState{
-  comments: Array<CommentInputState>;
+  comments: CommentItems[];
 }
 
 class App extends Component<AppProps, AppState> {
@@ -22,10 +28,14 @@ class App extends Component<AppProps, AppState> {
   }
   handleSubmit = (username: string, content: string) => {
     var { comments } = this.state;
-    comments.push({username: username, content: content});
-    this.setState({
-      comments: comments,
-    })
+    if (username === '' || content === '') {
+      alert("请输入用户名或内容")
+    } else {
+      comments.push({username: username, content: content, id: comments.length});
+      this.setState({
+        comments: comments,
+      })
+    }
   }
 
   render () {

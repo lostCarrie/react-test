@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
-import { CommentInputState } from './CommentInput';
+import { CommentItems } from './App';
 
-class Comment extends Component<CommentInputState> {
+interface CommentProps {
+    commentItem: CommentItems;
+}
+
+class Comment extends Component<CommentProps> {
     static defaultProps = {
-        comment: {},
-    }
-    constructor(props: <CommentInputState>) {
-        super(props);
+        commentItem: {},
     }
     render (){
-        const {username, content} = this.props.comment;
+        const { commentItem } = this.props;
+        if (JSON.stringify(commentItem) === '{}') {
+            return null;
+        }
+        const {username, content} = commentItem;
         return (
-
             <div>
-                <span>{ username }</span>
-                <span>{ content }</span>
+                <span>用户名：{ username }</span>
+                <span>评论内容：{ content }</span>
             </div>
         )
     }
