@@ -6,6 +6,7 @@ import CommentList from './CommentList';
 
 export interface CommentItems extends CommentInputState {
   id: number;
+  date: Date;
 }
 
 interface AppProps{
@@ -26,15 +27,26 @@ class App extends Component<AppProps, AppState> {
       comments: [],
     }
   }
+
+  componentDidMount() {
+    const sessionComments: string | null = sessionStorage.getItem('comments');
+    if (sessionComments) {
+      const comments: CommentItems[] = JSON.parse(sessionComments);
+      this.setState({comments});
+    }
+  }
+
   handleSubmit = (username: string, content: string) => {
     var { comments } = this.state;
     if (username === '' || content === '') {
       alert("请输入用户名或内容")
     } else {
-      comments.push({username: username, content: content, id: comments.length});
+      sessionStorage.setItem('username', username);
+      comments.push({username: username, content: content, id: comments.length, date: new Date()});
+      sessionStorage.setItem('comments', JSON.stringify(comments));
       this.setState({
         comments: comments,
-      })
+      });
     }
   }
 

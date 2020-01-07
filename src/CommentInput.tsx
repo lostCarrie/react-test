@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+
 interface CommentInputProps {
     onSubmit: (username: string, content: string) => void;
 }
@@ -14,13 +15,22 @@ class CommentInput extends Component<CommentInputProps, CommentInputState> {
     static defaultProps = {
         onSubmit: () => {},
     }
-
+    input:HTMLInputElement | null = null;
     constructor(props: CommentInputProps) {
         super(props);
         this.state = {
             username: '',
             content: '',
         };
+    }
+    componentDidMount() {
+        if (this.input) {
+            this.input.focus();
+            const username = sessionStorage.getItem('username');
+            if (username) {
+                this.setState({username});
+            }
+        }
     }
 
     handleContentChange = (e: any) => {
@@ -51,7 +61,7 @@ class CommentInput extends Component<CommentInputProps, CommentInputState> {
             <div>
                 <div>
                     <span>用户名：</span>
-                    <input value={username} onChange={this.handleContentChange} name="username" />
+                    <input value={username} onChange={this.handleContentChange} name="username" ref={(input) => this.input = input}/>
                 </div>
                 <div>
                     <span>用户评论：</span>
