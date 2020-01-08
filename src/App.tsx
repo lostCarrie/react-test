@@ -58,11 +58,17 @@ class App extends Component<AppProps, AppState> {
     }
   }
 
+  handleDelete = (id: number) => {
+    const { comments } = this.state;
+    comments.splice(id, 1);
+    this.setState({comments});
+  }
+
   render () {
     return (
       <div>
         <CommentInput onSubmit={this.handleSubmit} />
-        <CommentList comments={this.state.comments} /> 
+        <CommentList comments={this.state.comments} onDelete={this.handleDelete}/> 
       </div>
     )
   }
