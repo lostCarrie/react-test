@@ -3,7 +3,9 @@ import { CommentItems } from './App';
 
 interface CommentProps {
     commentItem: CommentItems;
-    onDelete: (id: number) => void;
+    onDelete: (index: number) => void;
+    key: number;
+    index: number;
 }
 
 interface CommentState {
@@ -42,26 +44,40 @@ class Comment extends Component<CommentProps, CommentState> {
             this.setState({ timeString });
         }
     }
-    handleDelete = (id: number) => {
-        this.props.onDelete(id);
+
+    _getProcessedContent = (content: string) => {
+        return content
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;")
+      .replace(/`([\S\s]+?)`/g, '<code>$1</code>')
+    }
+
+    handleDelete = (index: number) => {
+        this.props.onDelete(index);
     }
 
     render() {
-        const { commentItem } = this.props;
+        const { commentItem, index } = this.props;
         const { timeString } = this.state;
         if (JSON.stringify(commentItem) === '{}') {
             return null;
         }
-        const { username, content, id } = commentItem;
+        const { username, content } = commentItem;
         return (
             <div>
                 <div>
                     <span>用户名：{username}</span>
-                    <span>评论内容：{content}</span>
+                    <span>评论内容：
+                    <p dangerouslySetInnerHTML={{__html: this._getProcessedContent(content)}}>
+                    </p>
+                    </span>
                     <span>发布时间：{timeString}</span>
                 </div>
                 <div>
-                    <button onClick={() => {this.handleDelete(id)}}>删除</button>
+                    <button onClick={() => {this.handleDelete(index)}}>删除</button>
                 </div>
             </div>
         )

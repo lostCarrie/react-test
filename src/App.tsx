@@ -52,16 +52,15 @@ class App extends Component<AppProps, AppState> {
       sessionStorage.setItem('username', username);
       comments.push({username: username, content: content, id: comments.length, date: new Date()});
       this._saveComments(comments);
-      this.setState({
-        comments: comments,
-      });
+      this.setState({comments});
     }
   }
 
-  handleDelete = (id: number) => {
+  handleDelete = (index: number) => {
     const { comments } = this.state;
-    comments.splice(id, 1);
+    comments.splice(index, 1);
     this.setState({comments});
+    this._saveComments(comments);
   }
 
   render () {

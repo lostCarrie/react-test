@@ -4,7 +4,7 @@ import { CommentItems } from './App';
 
 interface CommentListProps {
     comments: CommentItems[],
-    onDelete: (id: number) => void;
+    onDelete: (index: number) => void;
 }
 
 class CommentList extends Component<CommentListProps> {
@@ -13,8 +13,8 @@ class CommentList extends Component<CommentListProps> {
         onDelete: () => {},
     }
     
-    handleDelete = (id: number) => {
-        this.props.onDelete(id);
+    handleDelete = (index: number) => {
+        this.props.onDelete(index);
     }
 
     render (){
@@ -24,9 +24,7 @@ class CommentList extends Component<CommentListProps> {
         return (
             <div>
                 {this.props.comments.map((item,i) => (
-                    <div key={i}>
-                        <Comment commentItem={item} onDelete={this.props.onDelete}/>
-                    </div>
+                    <Comment commentItem={item} onDelete={this.props.onDelete} key={i} index={i} />
                 ))}
             </div>
             
