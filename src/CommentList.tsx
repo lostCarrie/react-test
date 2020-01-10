@@ -18,9 +18,7 @@ class CommentList extends Component<CommentListProps> {
     }
 
     render (){
-        if( this.props.comments.length === 0 ) {
-            return null;
-        }
+        
         return (
             <div>
                 {this.props.comments.map((item,i) => (

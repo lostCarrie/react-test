@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CommentInput, { CommentInputState } from './CommentInput';
 import CommentList from './CommentList';
+import wrapWithLoadData from './wrapWithLoadData';
 
 
 
@@ -10,38 +11,24 @@ export interface CommentItems extends CommentInputState {
 }
 
 interface AppProps{
-  comments: Array<CommentItems>;
+  data: Array<CommentItems>;
+  saveData: (data: Array<CommentItems>) => void;
 }
 
 interface AppState{
   comments: CommentItems[];
 }
 
-class App extends Component<AppProps, AppState> {
+class CommentApp extends Component<AppProps, AppState> {
   static defaultProps:AppProps = {
-    comments: [],
+    data: [],
+    saveData: () => {},
   }
   constructor(props: AppProps) {
     super(props);
     this.state = {
-      comments: [],
+      comments: props.data || [],
     }
-  }
-
-  componentWillMount() {
-    this._loadComments();
-  }
-
-  _loadComments = () => {
-    let sessionComments: string | null = sessionStorage.getItem('comments');
-    if (sessionComments) {
-      let comments: CommentItems[] = JSON.parse(sessionComments);
-      this.setState({comments});
-    }
-  }
-
-  _saveComments = (comments: CommentItems[]) => {
-    sessionStorage.setItem('comments', JSON.stringify(comments));
   }
 
   handleSubmit = (username: string, content: string) => {
@@ -51,7 +38,7 @@ class App extends Component<AppProps, AppState> {
     } else {
       sessionStorage.setItem('username', username);
       comments.push({username: username, content: content, id: comments.length, date: new Date()});
-      this._saveComments(comments);
+      this.props.saveData(comments);
       this.setState({comments});
     }
   }
@@ -60,7 +47,7 @@ class App extends Component<AppProps, AppState> {
     const { comments } = this.state;
     comments.splice(index, 1);
     this.setState({comments});
-    this._saveComments(comments);
+    this.props.saveData(comments);
   }
 
   render () {
@@ -73,4 +60,5 @@ class App extends Component<AppProps, AppState> {
   }
 }
 
+const App = wrapWithLoadData(CommentApp, 'comments');
 export default App;

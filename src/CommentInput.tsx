@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import wrapWithLoadData from './wrapWithLoadData';
 
 
 interface CommentInputProps {
+    data: string;
+    saveData: (data: string) => void;
     onSubmit: (username: string, content: string) => void;
 }
 
@@ -11,7 +14,7 @@ export interface CommentInputState {
 }
 
 
-class CommentInput extends Component<CommentInputProps, CommentInputState> {
+class Input extends Component<CommentInputProps, CommentInputState> {
     static defaultProps = {
         onSubmit: () => {},
     }
@@ -19,13 +22,9 @@ class CommentInput extends Component<CommentInputProps, CommentInputState> {
     constructor(props: CommentInputProps) {
         super(props);
         this.state = {
-            username: '',
+            username: props.data || '',
             content: '',
         };
-    }
-
-    componentWillMount() {
-        this._loadUsername();
     }
 
     componentDidMount() {
@@ -48,18 +47,8 @@ class CommentInput extends Component<CommentInputProps, CommentInputState> {
         
     }
 
-    _loadUsername = () => {
-        const username = sessionStorage.getItem('username');
-        if (username) {
-            this.setState({username});
-        }
-    }
-    _saveUsername = (username: string) => {
-        sessionStorage.setItem('username', username);
-    }
-
     handleUsernameBlur = (e: any) =>{
-        this._saveUsername(e.target.value);
+        this.props.saveData(e.target.value);
     }
 
     handleSubmit = () => {
@@ -88,4 +77,5 @@ class CommentInput extends Component<CommentInputProps, CommentInputState> {
     }
 }
 
+const CommentInput = wrapWithLoadData(Input, 'username');
 export default CommentInput;

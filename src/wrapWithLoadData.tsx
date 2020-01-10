@@ -1,4 +1,4 @@
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
 
 export default (WrappedComponent: React.ComponentClass<any>, name: string) => {
 
@@ -17,7 +17,7 @@ export default (WrappedComponent: React.ComponentClass<any>, name: string) => {
         componentWillMount() {
             let data = sessionStorage.getItem(name);
             try {
-                this.setState({data: JSON.parse});
+                this.setState({data: JSON.parse(data as string)});
             } catch (e) {
                 this.setState({data});
             }
@@ -27,7 +27,7 @@ export default (WrappedComponent: React.ComponentClass<any>, name: string) => {
             try {
                 sessionStorage.setItem(name, JSON.stringify(data));
             } catch (e) {
-                sessionStorage.setItem(name, data);
+                sessionStorage.setItem(name, data as string);
             }
         }
 
