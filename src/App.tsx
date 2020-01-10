@@ -7,7 +7,7 @@ import wrapWithLoadData from './wrapWithLoadData';
 
 export interface CommentItems extends CommentInputState {
   id: number;
-  date: Date;
+  date: number;
 }
 
 interface AppProps{
@@ -37,7 +37,7 @@ class CommentApp extends Component<AppProps, AppState> {
       alert("请输入用户名或内容")
     } else {
       sessionStorage.setItem('username', username);
-      comments.push({username: username, content: content, id: comments.length, date: new Date()});
+      comments.push({username: username, content: content, id: comments.length, date: +new Date()});
       this.props.saveData(comments);
       this.setState({comments});
     }

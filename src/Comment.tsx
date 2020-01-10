@@ -37,8 +37,8 @@ class Comment extends Component<CommentProps, CommentState> {
     _calTimeDiff = () => {
         const { commentItem } = this.props;
         if (commentItem) {
-            const last: any = commentItem.date;
-            const now: any = new Date();
+            const last: number = commentItem.date;
+            const now: number = +new Date();
             const timeDiff: number = (now - last) / 1000;
             const timeString: string = timeDiff > 60 ? `${Math.round(timeDiff / 1000)}min以前` : `${Math.round(Math.max(timeDiff, 1))}s以前`;
             this.setState({ timeString });
