@@ -31,7 +31,7 @@ function createStore(reducer: any) {
     dispatch({});
     return { getState, dispatch, subscribe }
 }
-const store = createStore(themeReducer);
+export const store = createStore(themeReducer);
 
 const storeContext = React.createContext({store});
 

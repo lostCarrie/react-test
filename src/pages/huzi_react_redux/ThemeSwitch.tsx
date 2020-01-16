@@ -1,41 +1,43 @@
 import React, { Component } from 'react';
-import storeContext from './storeContext';
+import connect from './Connect';
 
-class ThemeSwitch extends Component {
-    state = {
-        themeColor: '',
-    }
-    componentDidMount() {
-        const { store } = this.context
-    this._updateThemeColor()
-    store.subscribe(() => this._updateThemeColor())
-        
-    }
 
-    _updateThemeColor = () => {
-        const {store} = this.context;
-        if (store) {
-            let state = store.getState();
-            this.setState({
-                themeColor: state.themeColor,
-            })
-        }
-    }
+interface themeSwitchProps {
+    themeColor: string;
+    onSwitchColor: (color: string) => any;
+}
+
+class ThemeSwitchCom extends Component<themeSwitchProps> {
+    
     _handleClick = (color: string) => {
-        const { store } = this.context;
-            store.dispatch({
-                type: 'CHANGE_THEMECOLOR',
-                themeColor: color
-                });
+        const { onSwitchColor } = this.props;
+        if (onSwitchColor) {
+            onSwitchColor(color);
+        }
     }
     render() {
         return (
             <div>
-                <button style={{color: this.state.themeColor}} onClick={this._handleClick.bind(this,'red')}>red</button>
-                <button style={{color: this.state.themeColor}} onClick={this._handleClick.bind(this,'blue')}>blue</button>
+                <button style={{color: this.props.themeColor}} onClick={this._handleClick.bind(this,'red')}>red</button>
+                <button style={{color: this.props.themeColor}} onClick={this._handleClick.bind(this,'blue')}>blue</button>
             </div>
         )
     }
 }
-ThemeSwitch.contextType = storeContext;
+
+const mapStateToProps = (state: any): any => {
+    return {
+        themeColor: state.themeColor,
+    };
+}
+
+
+const mapDispatchToProps = (dispatch: any): any => {
+    return {
+        onSwitchColor: (color: string) => {
+            dispatch({type: 'CHANGE_THEMECOLOR', themeColor: color});
+        }
+    }
+}
+const ThemeSwitch = connect(mapStateToProps,mapDispatchToProps)(ThemeSwitchCom);
 export default ThemeSwitch;

@@ -1,32 +1,23 @@
 import React, { Component } from 'react';
-import storeContext from './storeContext';
+import connect from './Connect';
 
-class Header extends Component {
+interface headerProps {
+    themeColor: string;
+}
+class HeaderCom extends Component<headerProps>{
     
-    
-    state = {
-        themeColor: '',
-    }
-    componentDidMount() {
-        const { store } = this.context
-    this._updateThemeColor()
-    store.subscribe(() => this._updateThemeColor())
-    }
-
-    _updateThemeColor = () => {
-        const {store} = this.context;
-        if (store) {
-            let state = store.getState();
-            this.setState({
-                themeColor: state.themeColor,
-            })
-        }
-    }
     render() {
         return (
-            <h1 style={{color: this.state.themeColor}}>《React 小书》</h1>
+            <h1 style={{color: this.props.themeColor}}>《React 小书》</h1>
         )
     }
 }
-Header.contextType = storeContext;
+const mapStateToProps = (state: any): any => {
+    return {
+        themeColor: state.themeColor,
+    };
+}
+
+const Header = connect(mapStateToProps)(HeaderCom);
+
 export default Header;
